@@ -14,7 +14,7 @@ namespace foxclient
 {
     public partial class fox : MetroForm
     {
-        internal static IEngine engine = EngineFactory.Create(new EngineOptions.Builder { LicenseKey = "1BNKDJZJSCZMPTZKWHVDJ65Q3QP48T2PF7SGZB75RJ21CDIAISZO9EP7NUVTSP9CG602LH" }.Build());
+        internal static IEngine engine = EngineFactory.Create(new EngineOptions.Builder { LicenseKey = "6P91WMFPXC31DBXTPE88CCAK6WXVI995IY1O06K0OHAVX7IPSS6OH3CC2BPMFAME1S9W" }.Build());
         internal delegate void OAuthDelegate(string accesstoken);
         internal const string APIversion = "5.103";
         private const string APIlink = "https://api.vk.com/method/";

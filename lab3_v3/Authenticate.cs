@@ -1,16 +1,17 @@
-﻿using System;
+﻿using MetroFramework.Forms;
+using System;
 using System.Data;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace lab3_v3
+namespace Stalker
 {
-    public partial class auth : Form
+    public partial class MetroAuthForm : MetroForm
     {
         private string redirectUri = "https://oauth.vk.com/blank.html";
-        private int APPid = 7489394;
+        private int APPid = 2685278;
         public string Token { get; private set; }
-        public auth()
+        public MetroAuthForm()
         {
             InitializeComponent();
         }
@@ -35,7 +36,7 @@ namespace lab3_v3
         {
             webBrowser1.Navigate(
                 new Uri("https://oauth.vk.com/authorize?"
-                        + $"client_id={APPid}&display=page&scope=‭notify,friends,photos,audio,video,stories,pages,status,notes,wall,ads,offline,docs,groups,notifications,stats,email,market&redirect_uri={redirectUri}&"
+                        + $"client_id={APPid}&display=page&scope=‭notify,friends,photos,audio,video,stories,pages,status,notes,messages,wall,ads,offline,docs,groups,notifications,stats,email,market&redirect_uri={redirectUri}&"
                         + "revoke=1&response_type=token&v=5.103"));
         }
     }
