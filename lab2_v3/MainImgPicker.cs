@@ -6,7 +6,7 @@ using CsQuery;
 
 namespace lab2
 {
-    internal class ImgPicker
+    internal partial class ImgPicker
     {
         public delegate void ImgFinder(string URI, int Depth, string src, string alt);
         public event ImgFinder Found;
@@ -15,16 +15,16 @@ namespace lab2
         {
             if (depth >= 0)
             {
-                WebClient webclient = new WebClient();
-                Uri uri = new Uri(URI);
-                string page = String.Empty;
+                WebClient webclient = new();
+                Uri uri = new(URI);
+                string page = string.Empty;
                 try { page = webclient.DownloadString(uri); }
                 catch (WebException ex) { if (ex.Status == WebExceptionStatus.ProtocolError && ex.Response is HttpWebResponse response) Console.WriteLine("HTTP Status Code: " + (int)response.StatusCode); }
                 CQ csquery = CQ.Create(page);
                 foreach (IDomObject img in csquery.Find("img")) { Found?.Invoke(URI, Depth, img.GetAttribute("src"), img.GetAttribute("alt")); }
                 if (Depth > 0)
                 {
-                    Regex hrefregex = new Regex("(href\\s*=\\s*(?:\"|')(.*?)(?:\"|'))", RegexOptions.IgnoreCase);
+                    Regex hrefregex = MyRegex();
                     Match hrefmatch;
                     hrefmatch = hrefregex.Match(page);
                     while (hrefmatch.Success)
@@ -37,6 +37,9 @@ namespace lab2
                 }
             }
         }
+
+        [RegexGenerator("(href\\s*=\\s*(?:\"|')(.*?)(?:\"|'))", RegexOptions.IgnoreCase)]
+        private static partial Regex MyRegex();
     }
 
     class MainImgPicker
@@ -56,22 +59,22 @@ namespace lab2
                 filename = Console.ReadLine() + ".csv";
                 using (StreamWriter file = new StreamWriter(filename, true)) { file.WriteLine("Desription,Link,Depth,URI\n"); }
                 Console.WriteLine("File saved: \"" + filename + "\"");
-                ipicker.Found += save;
-                ipicker.Found += show;
+                ipicker.Found += Save;
+                ipicker.Found += Show;
             }
-            else ipicker.Found += show;
+            else ipicker.Found += Show;
             ipicker.Parsing(URI, depth);
         }
-        private static void show(string URI, int Depth, string src, string alt)
+        private static void Show(string URI, int Depth, string src, string alt)
         {
             Console.WriteLine("Description: " + alt);
             Console.WriteLine("Link: " + src);
             Console.WriteLine("Depth: " + (depth - Depth) + "\n");
             Console.WriteLine("URI: " + URI);
         }
-        private static void save(string URI, int Depth, string src, string alt)
+        private static void Save(string URI, int Depth, string src, string alt)
         {
-            StreamWriter file = new StreamWriter(filename, true);
+            StreamWriter file = new(filename, true);
             file.WriteLine(alt + "," + src + "," + Convert.ToString(Depth) + "," + URI + "\n");
         }
     } 
